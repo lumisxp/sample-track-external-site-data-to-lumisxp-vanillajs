@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Principal</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<link rel='stylesheet' type='text/css' media='screen' href='css/main.css'>
+	<script>
+		// servidor LumisXP
+		var lumisXPServer = "http://localhost:8080";
+		
+		// pre-inicialização
+		window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
+		lum_track('config',{baseHref:lumisXPServer});
+
+		// pós-inicialização
+		document.addEventListener("DOMContentLoaded", function(){
+			// coletar pageview assim que a API do LumisXP estiver disponível
+			lum_track("event", "lumis.portal.monitor.ev.pageview");
+		});
+		
+		// armazenar horário de acesso para calcular tempo gasto na página
+		var lastPageviewTime = new Date().getTime()
+		
+		// coletar evento de leavepage no beforeUnload da janela
+		window.addEventListener("beforeunload", function() {
+			var duration = new Date().getTime() - lastPageviewTime
+
+			lum_track("event", "lumis.portal.monitor.ev.leavepage", {
+				"lum_event.duration": duration
+			});
+		});
+	</script>
+	<script async src='http://localhost:8080/lumis/portal/monitor/script/track.js'></script>
+</head>
+<body class="page">
+	<nav>
+		<ul>
+			<li><a href="index.html">Principal</a></li>
+			<li><a href="pag1.html">Página 1</a></li>
+			<li><a href="pag2.html">Página 2</a></li>
+		</ul>
+	</nav>
+	<div>
+		Página principal
+	</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "sample-track-external-site-data-to-lumisxp-vanillajs",
+  "version": "1.0.0",
+  "description": "Exemplo de como coletar dados de um site externo para uma instalação do LumisXP",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumisxp/sample-track-external-site-data-to-lumisxp-vanillajs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lumisxp/sample-track-external-site-data-to-lumisxp-vanillajs/issues"
+  },
+  "homepage": "https://github.com/lumisxp/sample-track-external-site-data-to-lumisxp-vanillajs#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
