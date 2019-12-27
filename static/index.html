@@ -14,11 +14,8 @@
 		window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
 		lum_track('config',{baseHref:lumisXPServer});
 
-		// pós-inicialização
-		document.addEventListener("DOMContentLoaded", function(){
-			// coletar pageview assim que a API do LumisXP estiver disponível
-			lum_track("event", "lumis.portal.monitor.ev.pageview");
-		});
+		// coletar pageview assim que a API do LumisXP estiver disponível
+		lum_track("event", "lumis.portal.monitor.ev.pageview");
 		
 		// armazenar horário de acesso para calcular tempo gasto na página
 		var lastPageviewTime = new Date().getTime()

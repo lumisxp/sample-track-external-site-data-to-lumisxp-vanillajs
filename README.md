@@ -15,7 +15,7 @@ $ npm install
 $ npm run start
 ```
 
-Em seguida, digitar `http://localhost:3000` em um navegador da internet.
+Em seguida, abrir [`http://localhost:3000`](http://localhost:3000) em um navegador da internet.
 
 # Explicando o código
 Esse exemplo considera que o servidor para o qual os dados serão coletados é `http://localhost:8080`. Caso seja outro, o exemplo precisa ser adaptado de acordo.
@@ -30,11 +30,8 @@ var lumisXPServer = "http://localhost:8080";
 window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
 lum_track('config',{baseHref:lumisXPServer});
 
-// pós-inicialização
-document.addEventListener("DOMContentLoaded", function(){
-	// coletar pageview assim que a API do LumisXP estiver disponível
-	lum_track("event", "lumis.portal.monitor.ev.pageview");
-});
+// coletar pageview assim que a API do LumisXP estiver disponível
+lum_track("event", "lumis.portal.monitor.ev.pageview");
 
 // armazenar horário de acesso para calcular tempo gasto na página
 var lastPageviewTime = new Date().getTime()
@@ -62,17 +59,12 @@ lum_track('config',{baseHref:lumisXPServer});
 ```
 Essa pré inicialização serve para preparar o básico do código para preparar a página para que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) possa ser utilizada.
 
-#### 2 - Agenda a coleta de um evento de _pageview_ uma vez que o DOM esteja carregado
+#### 2 - Coleta um evento de _pageview_ uma vez que a API esteja carregada
 ```Javascript
-// pós-inicialização
-document.addEventListener("DOMContentLoaded", function(){
-	// coletar pageview assim que a API do LumisXP estiver disponível
-	lum_track("event", "lumis.portal.monitor.ev.pageview");
-});
+// coletar pageview assim que a API do LumisXP estiver disponível
+lum_track("event", "lumis.portal.monitor.ev.pageview");
 ```
-Esse trecho dispara uma coleta de um evento de _pageview_ assim que:
-1. O DOM da página esteja pronto; e
-2. A [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) já tenha sido carregada corretamente na página.
+Esse trecho dispara uma coleta de um evento de _pageview_ assim que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) já tenha sido carregada corretamente na página.
 
 
 #### 3 - Agenda uma coleta do evento de _leavepage_ para quando o usuário estiver prestes a sair da página
@@ -101,3 +93,27 @@ Após esse primeiro trecho de Javascript, é feita a inclusão da [API de coleta
 ```
 
 Essa tag de script inclui a API de forma assíncrona, para ter o menor impacto no carregamento da página o possível.
+
+# Coletando eventos customizados
+Eventos customizados podem ser coletados usando a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html). Para isso, basta executar um código como o a seguir:
+
+```Javascript
+lum_track("event", "my.custom.event.id");
+```
+Esse código pode ser colocado em eventos de `click`, `mouseover` e outros eventos do DOM.
+
+Caso queira adicionar valores a campos nessa coleta, basta adicionar um objeto de valores, como a seguir:
+```Javascript
+lum_track("event", "my.custom.event.id", {
+	"my.custom.field": "some custom value"
+});
+```
+Tipicamente, essa coleta pode ser realizada em segundo plano. Caso queira executar essa coleta de forma síncrona, basta adicionar uma função de *callback*, como a seguir:
+```Javascript
+lum_track("event", "my.custom.event.id", {
+	"my.custom.field": "some custom value"
+}, function(){
+	console.log("OK");
+});
+```
+Caso queira mais detalhes sobre a API, veja a [página da documentação](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html).
