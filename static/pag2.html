@@ -9,10 +9,16 @@
 	<script>
 		// servidor LumisXP
 		var lumisXPServer = "http://localhost:8080";
-		
+
+		// projeto da coleta
+		var projectId = "id-do-meu-projeto";
+
 		// pre-inicialização
 		window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
-		lum_track('config',{baseHref:lumisXPServer});
+		lum_track('config', {
+			baseHref:  lumisXPServer,
+			projectId: projectId
+		});
 
 		// coletar pageview assim que a API do LumisXP estiver disponível
 		lum_track("event", "lumis.portal.monitor.ev.pageview");

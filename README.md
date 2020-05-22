@@ -1,10 +1,13 @@
 # Como coletar dados para uma instalação do LumisXP
-Esse exemplo demonstra como coletar dados de um website para uma instalação do [**LumisXP**](https://lumisxp.lumis.com.br/) usando Javascript puro.
-Os arquivos de exemplo encontram-se na pasta `static` desse repositório. Nela existem três arquivos HTML usados para simular uma navegação, um arquivo Javascript utilizado para inicializar a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) e um arquivo CSS para definir regras básicas de estilização.
+
+![Coletando dados para um LumisXP externo ao meu site](https://github.com/lumisxp/sample-track-external-site-data-to-lumisxp-vanillajs/blob/12.4.0/readme/images/highlight.gif?raw=true)
+
+Esse exemplo demonstra como coletar dados de um website para uma instalação do [**LumisXP**](https://lumisxp.lumis.com.br/?utm_source=GitHub&utm_campaign=GitHubTrackSampleProject-Vanilla) usando Javascript puro.
+Os arquivos de exemplo encontram-se na pasta `static` desse repositório. Nela existem três arquivos HTML usados para simular uma navegação, um arquivo Javascript utilizado para inicializar a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) e um arquivo CSS para definir regras básicas de estilização.
 
 # Requisitos antes de executar o exemplo
-Antes de executar esse exemplo, alguns ajustes precisam ser feitos no [**LumisXP**](https://lumisxp.lumis.com.br/) para liberar as chamadas vindas do servidor de exemplo.
-Para ver esses ajustes, veja a [página esplicativa no manual](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.completesamples.html).
+Antes de executar esse exemplo, alguns ajustes precisam ser feitos no [**LumisXP**](https://lumisxp.lumis.com.br/?utm_source=GitHub&utm_campaign=GitHubTrackSampleProject-Vanilla) para liberar as chamadas vindas do servidor de exemplo.
+Para ver esses ajustes, veja a [página esplicativa no manual](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.completesamples.html).
 
 # Como executar esse exemplo
 Para facilitar a execução desse exemplo, recomenda-se a instalação do [Node.JS](https://nodejs.org/).
@@ -20,15 +23,21 @@ Em seguida, abrir [`http://localhost:3000`](http://localhost:3000) em um navegad
 # Explicando o código
 Esse exemplo considera que o servidor para o qual os dados serão coletados é `http://localhost:8080`. Caso seja outro, o exemplo precisa ser adaptado de acordo.
 
-Nas páginas, dentro do elemento `<head>`, há o primeiro block de script que faz:
+Nas páginas, dentro do elemento `<head>`, há o primeiro bloco de script que faz:
 
 ```Javascript
 // servidor LumisXP
 var lumisXPServer = "http://localhost:8080";
 
+// projeto da coleta
+var projectId = "id-do-meu-projeto";
+
 // pre-inicialização
 window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
-lum_track('config',{baseHref:lumisXPServer});
+lum_track('config', {
+	baseHref:  lumisXPServer,
+	projectId: projectId
+});
 
 // coletar pageview assim que a API do LumisXP estiver disponível
 lum_track("event", "lumis.portal.monitor.ev.pageview");
@@ -48,23 +57,37 @@ window.addEventListener("beforeunload", function() {
 
 Separando esse trecho em partes, temos:
 
-#### 1 - Uma pré inicialização do script de rastreamento do [**LumisXP**](https://lumisxp.lumis.com.br/)
+#### 1 - Uma pré inicialização do script de rastreamento do [**LumisXP**](https://lumisxp.lumis.com.br/?utm_source=GitHub&utm_campaign=GitHubTrackSampleProject-Vanilla)
 ```Javascript
 // servidor LumisXP
 var lumisXPServer = "http://localhost:8080";
 
+// projeto da coleta
+var projectId = "id-do-meu-projeto";
+
 // pre-inicialização
 window.lum_track=window.lum_track||function(){(lum_track.q=lum_track.q||[]).push([+new Date].concat([].slice.call(arguments)))};
-lum_track('config',{baseHref:lumisXPServer});
+lum_track('config', {
+	baseHref:  lumisXPServer,
+	projectId: projectId
+});
 ```
-Essa pré inicialização serve para preparar o básico do código para preparar a página para que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) possa ser utilizada.
+
+Essa pré inicialização serve para preparar a página para que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) possa ser utilizada.
+
+Nesse bloco, é importante se atentar às variáveis `var lumisXPServer = "http://localhost:8080";` e `var projectId = "id-do-meu-projeto";`.
+A primeira delas, `lumisXPServer`, é o servidor **LumisXP** que será utilizado para as coletas de eventos e gestão de experiência.
+A segunda, `projectId`, é o identificador do projeto criado no **LumisXP**.
+
+Uma mal configuração na primeira variável vai fazer com que as coletas não sejam realizadas. 
+Uma mal configuração na segunda vai fazer com que os dados dos eventos coletados não estejam disponíveis para a gestão de experiências.
 
 #### 2 - Coleta um evento de _pageview_ uma vez que a API esteja carregada
 ```Javascript
 // coletar pageview assim que a API do LumisXP estiver disponível
 lum_track("event", "lumis.portal.monitor.ev.pageview");
 ```
-Esse trecho dispara uma coleta de um evento de _pageview_ assim que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) já tenha sido carregada corretamente na página.
+Esse trecho dispara uma coleta de um evento de _pageview_ assim que a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html) já tenha sido carregada corretamente na página.
 
 
 #### 3 - Agenda uma coleta do evento de _leavepage_ para quando o usuário estiver prestes a sair da página
@@ -82,11 +105,11 @@ window.addEventListener("beforeunload", function() {
 });
 ```
 
-O evento de _leavepage_ (saída da página), que é utilizado em alguns relatórios padrão do [**LumisXP**](https://lumisxp.lumis.com.br/), requer que um valor seja passado no campo `lum_event.duration` que representa o número de milissegundos que o usuário permaneceu na página.
+O evento de _leavepage_ (saída da página), que é utilizado em alguns relatórios padrão do [**LumisXP**](https://lumisxp.lumis.com.br/?utm_source=GitHub&utm_campaign=GitHubTrackSampleProject-Vanilla), requer que um valor seja passado no campo `lum_event.duration` que representa o número de milissegundos que o usuário permaneceu na página.
 
 Esse tempo é calculado armazenando na variável `lastPageviewTime` a data e hora atual em milissegundos e depois subtraindo dessa variável a data e hora em milissegundos do momento que o usuário saiu da página.
 
-Após esse primeiro trecho de Javascript, é feita a inclusão da [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html):
+Após esse primeiro trecho de Javascript, é feita a inclusão da [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html):
 
 ```HTML
 <script async src='http://localhost:8080/lumis/portal/monitor/script/track.js'></script>
@@ -95,7 +118,7 @@ Após esse primeiro trecho de Javascript, é feita a inclusão da [API de coleta
 Essa tag de script inclui a API de forma assíncrona, para ter o menor impacto no carregamento da página o possível.
 
 # Coletando eventos customizados
-Eventos customizados podem ser coletados usando a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html). Para isso, basta executar um código como o a seguir:
+Eventos customizados podem ser coletados usando a [API de coleta de dados do **LumisXP**](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html). Para isso, basta executar um código como o a seguir:
 
 ```Javascript
 lum_track("event", "my.custom.event.id");
@@ -116,4 +139,4 @@ lum_track("event", "my.custom.event.id", {
 	console.log("OK");
 });
 ```
-Caso queira mais detalhes sobre a API, veja a [página da documentação](https://lumisxp.lumis.com.br/doc/lumisportal/12.2.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html).
+Caso queira mais detalhes sobre a API, veja a [página da documentação](https://lumisxp.lumis.com.br/doc/lumisportal/12.4.0/pt-BR/lumis.customization_and_development.technical_documentation.monitor.javascript_api.html).
